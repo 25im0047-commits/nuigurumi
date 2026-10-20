@@ -1,0 +1,130 @@
+#include <Adafruit_NeoPixel.h>
+#include <SoftwareSerial.h>
+#include <DFRobotDFPlayerMini.h>
+
+#ifdef __AVR__
+#include <avr/power.h>
+#endif
+
+// =====================
+// NeoPixel
+// =====================
+#define PIN 3
+#define NUMPIXELS 5
+
+Adafruit_NeoPixel pixels(
+  NUMPIXELS,
+  PIN,
+  NEO_GRB + NEO_KHZ800
+);
+
+// =====================
+// センサー
+// =====================
+#define standard0 32
+#define standard1 35
+
+// =====================
+// DFPlayer Mini
+// =====================
+// Arduino D10(RX) ← DFPlayer TX
+// Arduino D11(TX) → 1kΩ → DFPlayer RX
+SoftwareSerial dfSerial(10, 11);
+
+DFRobotDFPlayerMini player;
+
+
+// =====================
+// LEDを光らせる
+// =====================
+void lightLED(int num, int standard) {
+
+  if (num >= standard) {
+    return;
+  }
+
+  int activeCount = standard - num;
+
+  if (activeCount > NUMPIXELS) {
+    activeCount = NUMPIXELS;
+  }
+
+  for (int i = 0; i < activeCount; i++) {
+    pixels.setPixelColor(
+      i,
+      pixels.Color(0, 150, 0)
+    );
+  }
+}
+
+
+// =====================
+// setup
+// =====================
+void setup() {
+
+  // PCとのシリアル通信
+  Serial.begin(9600);
+
+  // -----------------
+  // NeoPixel
+  // -----------------
+  pixels.begin();
+  pixels.setBrightness(70);
+  pixels.clear();
+  pixels.show();
+
+  // -----------------
+  // DFPlayer
+  // -----------------
+  dfSerial.begin(9600);
+
+  Serial.println("DFPlayerを初期化中...");
+
+  if (!player.begin(dfSerial)) {
+    Serial.println("DFPlayerの初期化に失敗しました");
+    Serial.println("配線・microSDを確認してください");
+
+    // LEDやセンサーは動かしたいので
+    // while(true)にはしない
+  }
+  else {
+    Serial.println("DFPlayer OK");
+
+    // 音量 0〜30
+    player.volume(20);
+
+    delay(500);
+
+    // 0001.mp3を再生
+    player.playMp3Folder(1);
+  }
+}
+
+
+// =====================
+// loop
+// =====================
+void loop() {
+
+  // センサー読み取り
+  int val0 = analogRead(A0);
+  int val1 = analogRead(A1);
+
+  // シリアルモニターに表示
+  Serial.print(val0);
+  Serial.print(",");
+  Serial.println(val1);
+
+  // LEDをリセット
+  pixels.clear();
+
+  // センサー値に応じてLEDを設定
+  lightLED(val0, standard0);
+  lightLED(val1, standard1);
+
+  // LEDへ反映
+  pixels.show();
+
+  delay(50);
+}
