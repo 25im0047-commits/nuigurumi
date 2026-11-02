@@ -1,8 +1,37 @@
-node_modules/
+# Local handoff records and backups (kept on this computer)
+/AGENTS.md
+/PROGRESS.md
+/MEMORY.md
+/.local/
+/generated_images/
+/exhibition_materials_*/
+
+# OS, editor, credentials and build output
 .DS_Store
-__pycache__/
-*.pyc
-MEMORY.md
+._*
 .env
 .env.*
+*.pem
+*.key
+.vscode/
+.idea/
+build/
+out/
+.pio/
+*.class
+*.o
+*.elf
+*.hex
+*.eep
+*.dSYM/
+
+# Supply audio separately; do not publish SD-card contents by default
+*.mp3
+*.wav
+*.m4a
+
+# Preserve previous repository exclusions
+node_modules/
+__pycache__/
+*.pyc
 *.log

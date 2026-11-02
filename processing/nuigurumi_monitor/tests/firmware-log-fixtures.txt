@@ -1,0 +1,6 @@
+raw0:1023	raw1:1023	level0:1000	level1:1000	state:3	ready:1	cal:1	capture:-2	audio:0	muted:0
+raw0:1023	raw1:1023	level0:1000	level1:1000	state:3	ready:0	cal:0	capture:-1	audio:0	muted:0
+raw0:1023	raw1:1023	level0:1000	level1:1000	state:3	ready:0	cal:0	capture:0	audio:0	muted:0
+raw0:1023	raw1:1023	level0:1000	level1:1000	state:3	ready:0	cal:0	capture:1	audio:0	muted:0
+raw0:1023	raw1:1023	level0:1000	level1:1000	state:3	ready:0	cal:0	capture:-2	audio:0	muted:0
+raw0:1023	raw1:1023
